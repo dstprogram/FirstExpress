@@ -14,10 +14,9 @@ app.set('port',process.env.PORT || 3000);
 app.use(express.static(__dirname+'/public'));
 
 
-//视图中的动态内容,在about中我们动态显示
-var fortunes=['Conquer your fears or they will conquer you',
-'Rivers need springs','Do not fear what you do not know','you will have a pleasant surprise'];
-
+//视图中的动态内容,在about中我们动态显示,后来我们在lib下面的一个js文件中把它封装了起来
+//var fortunes=['Conquer your fears or they will conquer you','Rivers need springs','Do not fear what you do not know','you will have a pleasant surprise','Whenever possible,keep it simple'];
+var fortune=require('./lib/fortune.js');
 
 //我们需要将路由添加到处理404之前，否则永远显示的是404
 
@@ -30,7 +29,9 @@ app.get('/',function(req,res){
 });
 
 app.get('/about',function(req,res){
-	var randomFortune=fortunes[Math.floor(Math.random()*fortunes.length)];
+	//这一句也在lib中有了暴露的方法
+	//var randomFortune=fortunes[Math.floor(Math.random()*fortunes.length)];
+	var randomFortune=fortune.getFortune();
 	//res.type('text/plain');
 	//res.send('About MeadowLark Travel');
 	res.render('about',{fortune:randomFortune});
